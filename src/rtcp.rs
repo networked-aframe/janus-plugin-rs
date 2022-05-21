@@ -6,19 +6,20 @@
 /// <https://tools.ietf.org/html/draft-alvestrand-rmcat-remb-03> (definition of REMB)
 
 use janus_plugin_sys as ffi;
+use std::os::raw::c_char;
 
 /// Returns whether this RTCP packet is a FIR packet.
-pub fn has_fir(packet: &[i8]) -> bool {
+pub fn has_fir(packet: &[c_char]) -> bool {
     unsafe { ffi::rtcp::janus_rtcp_has_fir(packet.as_ptr() as *mut _, packet.len() as i32) == 1 }
 }
 
 /// Returns whether this RTCP packet is a PLI packet.
-pub fn has_pli(packet: &[i8]) -> bool {
+pub fn has_pli(packet: &[c_char]) -> bool {
     unsafe { ffi::rtcp::janus_rtcp_has_pli(packet.as_ptr() as *mut _, packet.len() as i32) == 1 }
 }
 
 /// If this RTCP packet is an REMB packet, returns the bitrate it contains; else None.
-pub fn get_remb(packet: &[i8]) -> Option<u32> {
+pub fn get_remb(packet: &[c_char]) -> Option<u32> {
     unsafe {
         match ffi::rtcp::janus_rtcp_get_remb(packet.as_ptr() as *mut _, packet.len() as i32) {
             0 => None,
@@ -28,7 +29,7 @@ pub fn get_remb(packet: &[i8]) -> Option<u32> {
 }
 
 /// Allocates and writes a new FIR packet with the given sequence number. The given sequence number needs to be incremented before calling the function.
-pub fn gen_fir(seq: &mut i32) -> Vec<i8> {
+pub fn gen_fir(seq: &mut i32) -> Vec<c_char> {
     let mut packet = Vec::with_capacity(20);
     let result = unsafe { ffi::rtcp::janus_rtcp_fir(packet.as_mut_ptr(), 20, seq) };
     match result {
@@ -42,7 +43,7 @@ pub fn gen_fir(seq: &mut i32) -> Vec<i8> {
 }
 
 /// Allocates and writes a new PLI packet.
-pub fn gen_pli() -> Vec<i8> {
+pub fn gen_pli() -> Vec<c_char> {
     let mut packet = Vec::with_capacity(12);
     let result = unsafe { ffi::rtcp::janus_rtcp_pli(packet.as_mut_ptr(), 12) };
     match result {
@@ -56,7 +57,7 @@ pub fn gen_pli() -> Vec<i8> {
 }
 
 /// Allocates and writes a new REMB packet with the given bitrate.
-pub fn gen_remb(bitrate: u32) -> Vec<i8> {
+pub fn gen_remb(bitrate: u32) -> Vec<c_char> {
     let mut packet = Vec::with_capacity(24);
     let result = unsafe { ffi::rtcp::janus_rtcp_remb(packet.as_mut_ptr(), 24, bitrate) };
     match result {
