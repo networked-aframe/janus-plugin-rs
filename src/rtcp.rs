@@ -34,7 +34,7 @@ pub fn gen_fir(seq: &mut i32) -> Vec<c_char> {
     let result = unsafe { ffi::rtcp::janus_rtcp_fir(packet.as_mut_ptr(), 20, seq) };
     match result {
         // errors should only be the result of invalid inputs to janus_rtcp_fir
-        err if err < 0 => unreachable!(format!("Error generating FIR packet (code {}) :(", err)),
+        err if err < 0 => unreachable!("Error generating FIR packet (code {}) :(", err),
         len => {
             unsafe { packet.set_len(len as usize) };
             packet
@@ -48,7 +48,7 @@ pub fn gen_pli() -> Vec<c_char> {
     let result = unsafe { ffi::rtcp::janus_rtcp_pli(packet.as_mut_ptr(), 12) };
     match result {
         // errors should only be the result of invalid inputs to janus_rtcp_pli
-        err if err < 0 => unreachable!(format!("Error generating PLI packet (code {}) :(", err)),
+        err if err < 0 => unreachable!("Error generating PLI packet (code {}) :(", err),
         len => {
             unsafe { packet.set_len(len as usize) };
             packet
@@ -62,7 +62,7 @@ pub fn gen_remb(bitrate: u32) -> Vec<c_char> {
     let result = unsafe { ffi::rtcp::janus_rtcp_remb(packet.as_mut_ptr(), 24, bitrate) };
     match result {
         // errors should only be the result of invalid inputs to janus_rtcp_remb
-        err if err < 0 => unreachable!(format!("Error generating REMB packet (code {}).", err)),
+        err if err < 0 => unreachable!("Error generating REMB packet (code {}).", err),
         len => {
             unsafe { packet.set_len(len as usize) };
             packet
