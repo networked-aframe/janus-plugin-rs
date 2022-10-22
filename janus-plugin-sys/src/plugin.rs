@@ -1,5 +1,5 @@
 use jansson_sys::json_t;
-use std::os::raw::{c_char, c_int, c_void, c_short};
+use std::os::raw::{c_char, c_uchar, c_int, c_uint, c_void, c_short};
 use glib_sys::gboolean;
 
 #[repr(C)]
@@ -16,10 +16,10 @@ pub struct janus_callbacks {
     pub relay_rtcp: extern "C" fn(handle: *mut janus_plugin_session, packet: *mut janus_plugin_rtcp),
     pub relay_data: extern "C" fn(handle: *mut janus_plugin_session, packet: *mut janus_plugin_data),
     pub send_pli: extern "C" fn(handle: *mut janus_plugin_session),
-    pub send_remb: extern "C" fn(handle: *mut janus_plugin_session, bitrate: c_int),
+    pub send_remb: extern "C" fn(handle: *mut janus_plugin_session, bitrate: c_uint),
     pub close_pc: extern "C" fn(handle: *mut janus_plugin_session),
     pub end_session: extern "C" fn(handle: *mut janus_plugin_session),
-    pub events_is_enabled: extern "C" fn() -> c_int,
+    pub events_is_enabled: extern "C" fn() -> gboolean,
     pub notify_event: extern "C" fn(plugin: *mut janus_plugin, handle: *mut janus_plugin_session, event: *mut json_t),
     pub auth_is_signed: extern "C" fn() -> gboolean,
     pub auth_is_signature_valid: extern "C" fn(plugin: *mut janus_plugin, token: *const c_char) -> gboolean,
@@ -55,10 +55,14 @@ pub struct janus_plugin_result {
 #[derive(Debug)]
 pub struct janus_plugin_rtp_extensions {
     pub audio_level : c_char,
-    pub audio_level_vad : c_char,
+    pub audio_level_vad : gboolean,
     pub video_rotation : c_short,
-    pub video_back_camera : c_char,
-    pub video_flipped : c_char,
+    pub video_back_camera : gboolean,
+    pub video_flipped : gboolean,
+    pub min_delay : c_short,
+    pub max_delay : c_short,
+    pub dd_len : c_uchar,
+    pub dd_content : [c_uchar; 256],
 }
 
 #[repr(C)]
