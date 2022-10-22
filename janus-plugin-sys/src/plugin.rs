@@ -1,5 +1,5 @@
 use jansson_sys::json_t;
-use std::os::raw::{c_char, c_uchar, c_int, c_uint, c_void, c_short};
+use std::os::raw::{c_char, c_uchar, c_int, c_uint, c_void, c_short, c_ushort};
 use glib_sys::gboolean;
 
 #[repr(C)]
@@ -68,18 +68,18 @@ pub struct janus_plugin_rtp_extensions {
 #[repr(C)]
 #[derive(Debug)]
 pub struct janus_plugin_rtp {
-    pub video :  c_char,
+    pub video :  gboolean,
     pub buffer : *mut c_char,
-    pub length : c_short,
+    pub length : c_ushort,
     pub extensions : janus_plugin_rtp_extensions,
 }
 
 #[repr(C)]
 #[derive(Debug)]
 pub struct janus_plugin_rtcp {
-    pub video : c_char,
+    pub video : gboolean,
     pub buffer : *mut c_char,
-    pub length : c_short,
+    pub length : c_ushort,
 }
 
 #[repr(C)]
@@ -89,7 +89,7 @@ pub struct janus_plugin_data {
     pub protocol : *mut c_char,
     pub binary : c_char,
     pub buffer : *mut c_char,
-    pub length : c_short,
+    pub length : c_ushort,
 }
 
 #[repr(C)]
