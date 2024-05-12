@@ -92,6 +92,6 @@ export_plugin!(&PLUGIN);
 
 Here are some projects which are using these bindings:
 
-* https://github.com/mozilla/janus-plugin-sfu
+* https://github.com/networked-aframe/janus-plugin-sfu
 * https://github.com/ivanovaleksey/janus-echotest-rs
-* https://github.com/foxford/janus-conference/
+* https://github.com/foxford/janus-conference
